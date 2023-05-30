@@ -16,10 +16,10 @@ try:
         # time.sleep(5)
         latest_quote = client.get_crypto_latest_quote(request_paramsCrypto)
         latest_ask_priceCrypto = latest_quote[f'{userStockQueryParam}'].ask_price
-        print(f"The latest asking price for the security is: ${latest_ask_priceCrypto}",end="\r")
+        print(f"{userStockQueryParam}: ${latest_ask_priceCrypto}",end="\r")
 # must use symbol to access even though it is single symbol
 except KeyboardInterrupt:
-        print(f"The latest asking price for the security is: ${latest_ask_priceCrypto}")
+        print(f"\n{userStockQueryParam} : ${latest_ask_priceCrypto}")
         pass
 
 
