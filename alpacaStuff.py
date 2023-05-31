@@ -1,27 +1,36 @@
 import keys
+import time
+import requests
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.data.live import StockDataStream
 from alpaca.data.historical import CryptoHistoricalDataClient
 from alpaca.data.requests import CryptoLatestQuoteRequest
-import time
-# no keys required
-client = CryptoHistoricalDataClient()
-userStockQueryParam = input("Enter the Ticker Symbol: ")
-# single symbol request
-request_paramsCrypto = CryptoLatestQuoteRequest(symbol_or_symbols=[f'{userStockQueryParam}'])
+from alpaca.common import exceptions
+from alpaca.trading.client import TradingClient
+from alpaca.trading.requests import GetAssetsRequest
+from alpaca.trading.enums import AssetClass
 
-try:
-    while True:
-        # time.sleep(5)
-        latest_quote = client.get_crypto_latest_quote(request_paramsCrypto)
-        latest_ask_priceCrypto = latest_quote[f'{userStockQueryParam}'].ask_price
-        print(f"{userStockQueryParam}: ${latest_ask_priceCrypto}",end="\r")
-# must use symbol to access even though it is single symbol
-except KeyboardInterrupt:
-        print(f"\n{userStockQueryParam} : ${latest_ask_priceCrypto}")
-        pass
 
+
+
+
+def showCryptoLivePrice(userStockQueryParam):
+    # no keys required
+    client = CryptoHistoricalDataClient()
+    
+    # single symbol request
+    request_paramsCrypto = CryptoLatestQuoteRequest(symbol_or_symbols=[f'{userStockQueryParam}'])
+    try:
+        while True:
+            # time.sleep(5)
+            latest_quote = client.get_crypto_latest_quote(request_paramsCrypto)
+            latest_ask_priceCrypto = latest_quote[f'{userStockQueryParam}'].ask_price
+            print(f"{userStockQueryParam}: ${latest_ask_priceCrypto}",end="\r")
+    # must use symbol to access even though it is single symbol
+    except KeyboardInterrupt:
+            print(f"\n{userStockQueryParam} : ${latest_ask_priceCrypto}")
+            pass
 
 
 
@@ -51,3 +60,21 @@ except KeyboardInterrupt:
 # wss_client.subscribe_quotes(quote_data_handler, "AAPL")
 
 # wss_client.run()
+
+def main():
+    trading_client = TradingClient(keys.KEY, keys.SECRET)
+
+# search for crypto assets
+    search_params = GetAssetsRequest(asset_class=AssetClass.CRYPTO)
+
+    assets = trading_client.get_all_assets(search_params)
+    allCryptoSymbols = []
+    for i in range(len(assets)):
+        allCryptoSymbols.append(assets[i].symbol)
+    userStockQueryParam = input("Enter the Ticker Symbol: ")
+    if userStockQueryParam in allCryptoSymbols:
+        showCryptoLivePrice(userStockQueryParam)
+    else:
+        print("DNE.")
+
+main()
