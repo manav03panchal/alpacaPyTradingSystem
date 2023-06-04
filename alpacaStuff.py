@@ -18,11 +18,9 @@ def showCryptoLivePrice(userStockQueryParam):
     request_paramsCrypto = CryptoLatestQuoteRequest(symbol_or_symbols=[f'{userStockQueryParam}'])
     try:
         while True:
-            
             latest_quote = client.get_crypto_latest_quote(request_paramsCrypto)
             latest_ask_priceCrypto = latest_quote[f'{userStockQueryParam}'].ask_price
             print(f"{userStockQueryParam}: ${latest_ask_priceCrypto}",end="\r")
-            time.sleep(2)
     # must use symbol to access even though it is single symbol
     except KeyboardInterrupt:
             print(f"\n{userStockQueryParam} : ${latest_ask_priceCrypto}")
@@ -35,11 +33,9 @@ def showStockLivePrice(userStockQueryParam):
     symbol_quotes = client.get_stock_latest_quote(request_params)
     try:
         while True:
-            
             symbol_quotes = client.get_stock_latest_quote(request_params)
             latest_ask_price = symbol_quotes[f'{userStockQueryParam}'].ask_price
             print(f"{userStockQueryParam} : ${latest_ask_price}",end="\r")
-            time.sleep(2)
     except KeyboardInterrupt:
             print(f"\n{userStockQueryParam} : ${latest_ask_price}")
 
@@ -69,6 +65,8 @@ def main():
     trading_client = TradingClient(keys.KEY, keys.SECRET)
     if (trading_client.get_clock().is_open):
         print("The market is open.")
-    getLivePriceAskAsset(trading_client)
-
+        getLivePriceAskAsset(trading_client)
+    else:
+        print("The stock market is closed, crypto market is open.")
+        getLivePriceAskAsset(trading_client)
 main()
