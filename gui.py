@@ -1,5 +1,15 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QComboBox
+from PyQt6.QtWidgets import (
+    QApplication,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QMessageBox,
+    QComboBox,
+)
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, pyqtSlot
 import keys
 from alpaca.data.historical import StockHistoricalDataClient, CryptoHistoricalDataClient
@@ -9,6 +19,7 @@ from alpaca.trading.client import TradingClient
 
 ERROR_PREFIX = "ERROR: "
 FETCHING_INTERVAL = 1000  # Fetching interval in milliseconds
+
 
 class LivePriceThread(QThread):
     live_price_updated = pyqtSignal(str)
@@ -27,7 +38,9 @@ class LivePriceThread(QThread):
                 if self.trading_client.get_asset(self.symbol).tradable:
                     self.show_stock_live_price()
                 else:
-                    self.error_occurred.emit(f"Symbol '{self.symbol}' is not tradable as a stock.")
+                    self.error_occurred.emit(
+                        f"Symbol '{self.symbol}' is not tradable as a stock."
+                    )
             elif self.asset_type == "Crypto":
                 self.show_crypto_live_price()
         except exceptions.APIError as e:
@@ -37,8 +50,12 @@ class LivePriceThread(QThread):
         client = CryptoHistoricalDataClient()
         while self.running:
             try:
-                latest_quote = client.get_crypto_latest_quote(CryptoLatestQuoteRequest(symbol_or_symbols=[self.symbol]))
-                self.live_price_updated.emit(f"{self.symbol}: ${latest_quote[self.symbol].ask_price}")
+                latest_quote = client.get_crypto_latest_quote(
+                    CryptoLatestQuoteRequest(symbol_or_symbols=[self.symbol])
+                )
+                self.live_price_updated.emit(
+                    f"{self.symbol}: ${latest_quote[self.symbol].ask_price}"
+                )
                 self.msleep(FETCHING_INTERVAL)
             except exceptions.APIError as e:
                 self.error_occurred.emit(str(e))
@@ -50,7 +67,9 @@ class LivePriceThread(QThread):
         while self.running:
             try:
                 symbol_quotes = client.get_stock_latest_quote(request_params)
-                self.live_price_updated.emit(f"{self.symbol}: ${symbol_quotes[self.symbol].ask_price}")
+                self.live_price_updated.emit(
+                    f"{self.symbol}: ${symbol_quotes[self.symbol].ask_price}"
+                )
                 self.msleep(FETCHING_INTERVAL)
             except exceptions.APIError as e:
                 self.error_occurred.emit(str(e))
@@ -58,6 +77,7 @@ class LivePriceThread(QThread):
 
     def stop(self):
         self.running = False
+
 
 class UpperCaseLineEdit(QLineEdit):
     def __init__(self, *args, **kwargs):
@@ -67,6 +87,7 @@ class UpperCaseLineEdit(QLineEdit):
         super().keyPressEvent(event)
         self.setText(self.text().upper())
         self.setCursorPosition(len(self.text()))  # keep the cursor at the end of text
+
 
 class LivePriceWidget(QWidget):
     def __init__(self, parent=None):
@@ -78,7 +99,9 @@ class LivePriceWidget(QWidget):
         self.symbol_layout = QHBoxLayout()
         self.symbol_label = QLabel("Enter Ticker Symbol:")
         self.symbol_input = QLineEdit()
-        self.symbol_input.textChanged.connect(lambda: self.symbol_input.setText(self.symbol_input.text().upper()))
+        self.symbol_input.textChanged.connect(
+            lambda: self.symbol_input.setText(self.symbol_input.text().upper())
+        )
         # Add the label and line edit to the horizontal layout
         self.symbol_layout.addWidget(self.symbol_label)
         self.symbol_layout.addWidget(self.symbol_input)
