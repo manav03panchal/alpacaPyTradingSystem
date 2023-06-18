@@ -29,7 +29,7 @@ class LivePriceThread(QThread):
         super().__init__()
         self.symbol = symbol
         self.asset_type = asset_type
-        self.trading_client = TradingClient(keys.KEY, keys.SECRET)
+        self.trading_client = TradingClient(keys.KEY, keys.SECRET, paper=True)
         self.running = True
 
     def run(self):
