@@ -1,6 +1,6 @@
 # alpacaPyTradingSystem
 
-An attempt at making a standalone paper trading GUI using pyQt6 and the Alpcaca-py SDK.
+An attempt at making a standalone paper trading GUI using pyQt6 and the Alpcaca-py SDK. (https://github.com/alpacahq/alpaca-py)
 
 # To run this project
 
