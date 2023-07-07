@@ -1,6 +1,8 @@
 # alpacaPyTradingSystem
 
-An attempt at making a standalone paper trading GUI using pyQt6 and the Alpaca-py SDK. (https://github.com/alpacahq/alpaca-py)
+An attempt at making a standalone all-in-one paper trading GUI using pyQt6 and the Alpaca-py SDK. (https://github.com/alpacahq/alpaca-py)
+It was supposed to provide the user with live asking price of an equity traded on the US Markets, as well as Crypto/USD Prices.
+Users could also see the graph, as well as place orders, all managed by the SDK's Trading API.
 
 # To run this project
 
