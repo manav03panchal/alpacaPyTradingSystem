@@ -6,7 +6,7 @@ Users could also see the graph, as well as place orders, all managed by the SDK'
 
 # To run this project
 
-Get keys from Alpaca.com, make a file called "keys.py" and open gui.py and run.
+Get keys from https://app.markets.alpaca, make a file called "keys.py" and open gui.py and run.
 Internet connection is required.
 
 # Current Issues
